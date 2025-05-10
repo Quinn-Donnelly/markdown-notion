@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 )
@@ -32,8 +32,8 @@ func (c *Client) GetTasks(databaseID string) {
 	filter, _ := json.Marshal(map[string]string{})
 	filterBody := bytes.NewBuffer(filter)
 
-	log.Println(fmt.Sprintf(queryEndpointTemplate, taskDatabaseId))
-	req, err := http.NewRequest("POST", fmt.Sprintf(queryEndpointTemplate, taskDatabaseId), filterBody)
+	log.Println(fmt.Sprintf(queryEndpointTemplate, databaseID))
+	req, err := http.NewRequest("POST", fmt.Sprintf(queryEndpointTemplate, databaseID), filterBody)
 	if err != nil {
 		log.Fatalf("unable to create request: %f", err)
 	}
@@ -51,7 +51,7 @@ func (c *Client) GetTasks(databaseID string) {
 		log.Fatal("API response non 200: failed to call API")
 	}
 
-	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	bodyBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalf("Can't read response body: %s", err)
 	}
