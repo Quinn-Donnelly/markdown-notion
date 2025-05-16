@@ -28,6 +28,14 @@ type NotionObject struct {
 	Id string `json:"string"`
 }
 
+func (o *NotionObject) String() string {
+	return fmt.Sprintf("%s: %v", o.Id, o.Object)	
+}
+
+func (d *DatabaseResults) String() string {
+	return fmt.Sprintf("object: %s, results: %#v", d.Object, d.Results)
+}
+
 func (c *Client) GetTasks(databaseID string) {
 	filter, _ := json.Marshal(map[string]string{})
 	filterBody := bytes.NewBuffer(filter)
