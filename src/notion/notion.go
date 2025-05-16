@@ -38,7 +38,7 @@ func (d *DatabaseResults) String() string {
 	return fmt.Sprintf("object: %s, results: %#v", d.Object, d.Results)
 }
 
-type Task struct{
+type Task struct {
 	Name string
 }
 
@@ -48,29 +48,29 @@ func convertToTask(json string) []Task {
 
 	thing := expression.Get(data)
 
-	taskList := []Task{}	
-	for _,page := range thing {
+	taskList := []Task{}
+	for _, page := range thing {
 		task := Task{}
 		someShit := page.([]any)
-		for _,textObjs := range someShit {
-			task.Name = fmt.Sprintf("%s%s",task.Name, (textObjs.(map[string]any)["plain_text"]))
+		for _, textObjs := range someShit {
+			task.Name = fmt.Sprintf("%s%s", task.Name, (textObjs.(map[string]any)["plain_text"]))
 		}
 		taskList = append(taskList, task)
 	}
 
-	return taskList 
+	return taskList
 }
 
 func (c *Client) GetTasks(databaseID string) {
 	reader := strings.NewReader(`
-{
-  "filter": {
-      "property": "Flags for Actions",
-          "multi_select": {
-              "contains": "Focus Today"
-          }
-  }
-}
+		{
+		  "filter": {
+			  "property": "Flags for Actions",
+				  "multi_select": {
+					  "contains": "Focus Today"
+				  }
+		  }
+		}
 	`)
 
 	log.Println(fmt.Sprintf(queryEndpointTemplate, databaseID))
