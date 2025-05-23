@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
@@ -22,9 +23,14 @@ func main() {
 		log.Fatalf("No %s env var defined, you need a notion api token defined", NOTION_API)
 	}
 
-	client := notion.Client{
-		ApiToken: apiToken,
+	client := notion.NewClient(apiToken, taskDatabaseId)
+
+	tasks, err := client.GetFocusToday(context.Background())
+	if err != nil {
+		log.Fatalf("Error getting Focus today: %v", err)
 	}
 
-	client.GetTasks(taskDatabaseId)
+	for _, task := range tasks {
+		log.Printf("Task: %+v\n", task)
+	}
 }
